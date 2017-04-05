@@ -2,10 +2,7 @@
     <div class="main">
     	<!-- 顶部固定区域 -->
         <div class="fixedTop">
-        	<div class="myAvatar">
-	        	<img src="http://img.hb.aicdn.com/ff669ebb96bd7338ac72a09f8510bdd554b8e30224d22-cuDTSL_fw658">
-	        	<span>admin</span>
-	        </div>
+        	<v-mheader :title="title"></v-mheader>
 			<div class="tabBox">
 		      <mt-tabbar :value="selected" v-model="selected">
 				  <mt-tab-item id="category" @click.native="popupVisible = true">
@@ -25,7 +22,7 @@
 		<!-- 切换区域 -->
 		<div class="tabContent" id="tabContent" v-show="selected != ''">
 			<div class="categoryBox" v-show="selected == 'category'">
-				<div class="categoryArea" @click="addCount">
+				<div class="categoryArea">
 					<ul>
 						<li>
 							<div>
@@ -113,6 +110,10 @@
 				</div>
 				<div class="mask" @click="closeModal"></div>
 			</div>
+			<div class="categoryBox" v-show="selected == 'sendList'">
+				<div class="categoryArea">123</div>
+				<div class="mask" @click="closeModal"></div>
+			</div>
 		</div>
 		<!-- 底部 -->
 		<v-footer></v-footer>
@@ -125,6 +126,7 @@ import { Popup } from 'mint-ui';
 import { Indicator } from 'mint-ui';
 import FileList from '../components/fileList.vue';
 import Footer from '../components/footer.vue';
+import Mheader from '../components/mainHeader.vue';
 Vue.component(Tabbar.name, Tabbar);
 Vue.component(TabItem.name, TabItem);
 Vue.component(Popup.name, Popup);
@@ -136,22 +138,15 @@ export default {
           selected:'',
           popupVisible: false,
           wh:0,
-          fileBox:[]
+          fileBox:[],
+          title:'1233444',
         }
     },
-    beforeRouteUpdate (to, from, next) {
-	    const toDepth = to.path.split('/').length
-	    const fromDepth = from.path.split('/').length
-	    this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-	    console.log(to,from);
-	    next()
-	},
     created:function(){
     	//得到窗口高度
     	this.wh = document.body.clientHeight || document.documentElement.clientHeight;
     	//获取文件列表
     	// 初次进入获取整个文件夹列表
-
     	this.getFileList();
     },
     mounted:function(){
@@ -197,14 +192,12 @@ export default {
 	    		// 关闭loading
 	    		Indicator.close();
 	    	})
-    	},
-    	addCount:function(){
-    		this.$store.commit('increment');
     	}
     },
     components:{
     	"v-file":FileList,
-    	"v-footer":Footer
+    	"v-footer":Footer,
+    	"v-mheader":Mheader
     }
 }
 </script>
@@ -245,32 +238,7 @@ export default {
 		top:0;
 		z-index: 3;
 	}
-	.myAvatar{
-		position: relative;
-		z-index: 222;
-		padding: 10px 0;
-		background: url("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1490678941&di=8e66ccec1cbfe2de6c7fd37a05d01b79&src=http://pic9.nipic.com/20100905/3367900_113641047167_2.jpg");
-		height: 60px;
-		background-position: 0 -30px;
-		box-sizing: border-box;
-		display: flex;
-		align-items:center;
-		img{
-			width: 30px;
-			height: 30px;
-			padding: 2px;
-			background: #fff;
-			border:1px solid #d2d2d2;
-			border-radius: 50%;
-			margin-left: 30px;
-			vertical-align: middle;
-		}
-		span{
-			color: #fff;
-			margin-left: 10px;
-			font-size: 14px;
-		}
-	}
+	
 	.tabContent{
 		position: absolute;
 		left: 0;

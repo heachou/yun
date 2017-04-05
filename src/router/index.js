@@ -15,13 +15,14 @@ import Transmission from '@/pages/Transmission'
 import Share from '@/pages/Share'
 import Look from '@/pages/Look'
 import More from '@/pages/More'
+import ChildrenFileList from '@/pages/ChildrenFileList'
 
 
 Vue.use(Router)
 Vue.use(VueResource);
 Vue.use(Mint)
 
-export default new Router({
+const router = new Router({
   mode:"history",
   routes: [
     {//登录页
@@ -37,7 +38,12 @@ export default new Router({
     {//首页
       path: '/main',
       name: 'Main',
-      component: Main
+      component: Main,
+    },
+    {//在首页点击文件夹跳转的页面
+      path: '/main/*',
+      name: 'Main',
+      component: ChildrenFileList,
     },
     {//分享
       path: '/share',
@@ -55,7 +61,7 @@ export default new Router({
       component: More
     },
     {//传输列表
-      path: '/transmission',
+      path: '/transmission/list',
       name: 'Transmission',
       component: Transmission
     },
@@ -66,3 +72,7 @@ export default new Router({
     },
   ]
 })
+router.beforeEach((to, from, next) => {
+  next();
+})
+export default router;

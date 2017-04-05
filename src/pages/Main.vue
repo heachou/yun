@@ -3,7 +3,7 @@
     	<!-- 顶部固定区域 -->
         <div class="fixedTop">
         	<div class="myAvatar">
-	        	<img src="http://b.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=f0c5c08030d3d539c16807c70fb7c566/8ad4b31c8701a18bbef9f231982f07082838feba.jpg">
+	        	<img src="http://img.hb.aicdn.com/ff669ebb96bd7338ac72a09f8510bdd554b8e30224d22-cuDTSL_fw658">
 	        	<span>admin</span>
 	        </div>
 			<div class="tabBox">
@@ -126,6 +126,7 @@
 import Vue from 'vue'
 import { Tabbar, TabItem } from 'mint-ui';
 import { Popup } from 'mint-ui';
+import { Indicator } from 'mint-ui';
 import FileList from '../components/fileList.vue';
 import Footer from '../components/footer.vue';
 Vue.component(Tabbar.name, Tabbar);
@@ -171,6 +172,7 @@ export default {
     		this.selected = '';
     	},
     	getFileList:function(){
+    		Indicator.open();
     		this.$http.post('/api/getfile/uploads').then(function(response){
 	    		var data = response.body;
 	    		var fileArray = data.list.fileArray;
@@ -185,6 +187,11 @@ export default {
 	    				this.fileBox.push(fileArray[i])
 	    			}
 	    		}
+	    		// 关闭loading
+	    		Indicator.close();
+	    	},function(){
+	    		// 关闭loading
+	    		Indicator.close();
 	    	})
     	}
     },
@@ -243,6 +250,7 @@ export default {
 		align-items:center;
 		img{
 			width: 30px;
+			height: 30px;
 			padding: 2px;
 			background: #fff;
 			border:1px solid #d2d2d2;

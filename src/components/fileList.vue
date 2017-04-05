@@ -1,35 +1,95 @@
 <template>
 	<div id="fileBox">
-		<ul>
-			<li v-for="item in fileBox">
-				<img :src="imgType(item.extName)">
-				<div class="left">
-					<p class="ellipsis">{{item.name}}</p>	
-					<span>{{item.birth}}</span>
-				</div>
-				<label class="inputBox">
-					<input type="checkbox" >
-				</label>
+		<ul v-if="listBox.length != 0">
+			<li v-for="item in listBox">
+				<template v-if="item.type =='folder'">
+					<img :src="imgType(item.extName)" @click="getList(item.path,item.name)">
+					<div class="left">
+						<p class="ellipsis">{{item.name}}</p>	
+						<span>{{item.birth}}</span>
+					</div>
+					<label class="inputBox">
+						<input type="checkbox" >
+					</label>
+				</template>
+				<template v-else>
+					<img :src="imgType(item.extName)">
+					<div class="left">
+						<p class="ellipsis">{{item.name}}</p>	
+						<span>{{item.birth}}</span>
+					</div>
+					<label class="inputBox">
+						<input type="checkbox" >
+					</label>
+				</template>
 			</li>
 		</ul>
-		<p v-if="fileBox.length == 0" class="text-center">暂无文件哟...</p>
+		<p v-if="listBox.length == 0" class="text-center nofile">暂无文件哟...</p>
 	</div>
 </template>
 <script type="text/javascript">
  	import imgTypeData from '../assets/js/imageType.js';
+	import { Indicator } from 'mint-ui';
+
 	export default{
 		props:{
 			fileBox:{
 				type:Array
 			}
 		},
+		data(){
+			return {
+				listBox: this.fileBox
+			}
+		},
+		created(){
+			console.log(location);
+			console.log("created");
+		},
 		methods:{
-			imgType:function(extname){
+			imgType:(extname) => {
 				if(extname){
 					extname = extname.split('.')[1];
-					return imgTypeData[extname];
+					// 改变为绝对路径
+					return location.origin+imgTypeData[extname];
 				}else{	
-					return imgTypeData.folder;
+					// 改变为绝对路径
+					return location.origin+imgTypeData.folder;
+				}
+			},
+			getList:function(path,folderName){
+				if(path){
+					Indicator.open();
+					console.log(path);
+					this.$router.push(location.pathname+'/'+folderName);
+					var p = {
+						"pathRouter":path,
+					}
+					try{
+						this.$http.post('/api/getfile/folderName',p).then(function(response){
+				    		var data = response.body;
+				    		var fileArray = data.list.fileArray;
+				    		var folderArray = data.list.folderArray;
+				    		this.listBox = [];
+				    		if(folderArray.length != 0){
+				    			for (var i = 0; i < folderArray.length; i++) {
+				    				this.listBox.push(folderArray[i])
+				    			}
+				    		}
+				    		if(fileArray.length != 0){
+				    			for (var i = 0; i < fileArray.length; i++) {
+				    				this.listBox.push(fileArray[i])
+				    			}
+				    		}
+				    		Indicator.close();
+				    	},function(){
+				    		// 关闭loading
+				    		Indicator.close();
+				    	})
+					}catch(e){
+						console.log(e);
+					}
+		    		
 				}
 			}
 		}
@@ -40,6 +100,11 @@
 		height: 100%;
 		overflow-y: scroll;
 		overflow-x: hidden;
+	}
+	.nofile{
+		font-size: 14px;
+		line-height: 3;
+		color: #666;
 	}
 	ul{
 		height: 100%;

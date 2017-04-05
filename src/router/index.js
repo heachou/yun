@@ -22,7 +22,7 @@ Vue.use(VueResource);
 Vue.use(Mint)
 
 export default new Router({
-  history: false,
+  mode:"history",
   routes: [
     {//登录页
       path: '/login',

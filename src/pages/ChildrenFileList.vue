@@ -2,10 +2,7 @@
     <div class="main">
     	<!-- 顶部固定区域 -->
         <div class="fixedTop">
-        	<div class="myAvatar">
-	        	<img src="http://img.hb.aicdn.com/ff669ebb96bd7338ac72a09f8510bdd554b8e30224d22-cuDTSL_fw658">
-	        	<span>admin</span>
-	        </div>
+        	<v-mheader :title="title"></v-mheader>
 			<div class="tabBox">
 		      <mt-tabbar :value="selected" v-model="selected">
 				  <mt-tab-item id="category" @click.native="popupVisible = true">
@@ -129,6 +126,7 @@ import { Popup } from 'mint-ui';
 import { Indicator } from 'mint-ui';
 import FileList from '../components/fileList.vue';
 import Footer from '../components/footer.vue';
+import Mheader from '../components/mainHeader.vue';
 Vue.component(Tabbar.name, Tabbar);
 Vue.component(TabItem.name, TabItem);
 Vue.component(Popup.name, Popup);
@@ -140,7 +138,8 @@ export default {
           selected:'',
           popupVisible: false,
           wh:0,
-          fileBox:[]
+          fileBox:[],
+          title:'1233444',
         }
     },
     created:function(){
@@ -156,7 +155,7 @@ export default {
     watch:{
     	selected(curVal,oldVal){
     		if(curVal=='sendList'){
-    			this.$router.push({path:'/transmission'});
+    			this.$router.push({path:'/transmission/list'});
     			return;
     		}
     		//弹出层时，禁止滚动
@@ -197,7 +196,8 @@ export default {
     },
     components:{
     	"v-file":FileList,
-    	"v-footer":Footer
+    	"v-footer":Footer,
+    	"v-mheader":Mheader
     }
 }
 </script>
@@ -238,32 +238,7 @@ export default {
 		top:0;
 		z-index: 3;
 	}
-	.myAvatar{
-		position: relative;
-		z-index: 222;
-		padding: 10px 0;
-		background: url("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1490678941&di=8e66ccec1cbfe2de6c7fd37a05d01b79&src=http://pic9.nipic.com/20100905/3367900_113641047167_2.jpg");
-		height: 60px;
-		background-position: 0 -30px;
-		box-sizing: border-box;
-		display: flex;
-		align-items:center;
-		img{
-			width: 30px;
-			height: 30px;
-			padding: 2px;
-			background: #fff;
-			border:1px solid #d2d2d2;
-			border-radius: 50%;
-			margin-left: 30px;
-			vertical-align: middle;
-		}
-		span{
-			color: #fff;
-			margin-left: 10px;
-			font-size: 14px;
-		}
-	}
+	
 	.tabContent{
 		position: absolute;
 		left: 0;

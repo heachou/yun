@@ -25,7 +25,7 @@
 		<!-- 切换区域 -->
 		<div class="tabContent" id="tabContent" v-show="selected != ''">
 			<div class="categoryBox" v-show="selected == 'category'">
-				<div class="categoryArea">
+				<div class="categoryArea" @click="addCount">
 					<ul>
 						<li>
 							<div>
@@ -113,10 +113,6 @@
 				</div>
 				<div class="mask" @click="closeModal"></div>
 			</div>
-			<div class="categoryBox" v-show="selected == 'sendList'">
-				<div class="categoryArea">123</div>
-				<div class="mask" @click="closeModal"></div>
-			</div>
 		</div>
 		<!-- 底部 -->
 		<v-footer></v-footer>
@@ -143,11 +139,19 @@ export default {
           fileBox:[]
         }
     },
+    beforeRouteUpdate (to, from, next) {
+	    const toDepth = to.path.split('/').length
+	    const fromDepth = from.path.split('/').length
+	    this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+	    console.log(to,from);
+	    next()
+	},
     created:function(){
     	//得到窗口高度
     	this.wh = document.body.clientHeight || document.documentElement.clientHeight;
     	//获取文件列表
     	// 初次进入获取整个文件夹列表
+
     	this.getFileList();
     },
     mounted:function(){
@@ -156,7 +160,7 @@ export default {
     watch:{
     	selected(curVal,oldVal){
     		if(curVal=='sendList'){
-    			this.$router.push({path:'/transmission'});
+    			this.$router.push({path:'/transmission/list'});
     			return;
     		}
     		//弹出层时，禁止滚动
@@ -193,6 +197,9 @@ export default {
 	    		// 关闭loading
 	    		Indicator.close();
 	    	})
+    	},
+    	addCount:function(){
+    		this.$store.commit('increment');
     	}
     },
     components:{

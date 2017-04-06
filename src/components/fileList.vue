@@ -4,7 +4,7 @@
 			<li v-for="item in listBox">
 				<template v-if="item.type =='folder'">
 					<img :src="imgType(item.extName)" @click="getList(item.path,item.name)">
-					<div class="left">
+					<div class="left" @click="getList(item.path,item.name)">
 						<p class="ellipsis">{{item.name}}</p>	
 						<span>{{item.birth}}</span>
 					</div>
@@ -42,9 +42,8 @@
 				listBox: this.fileBox
 			}
 		},
-		created(){
+		ready(){
 			console.log(location);
-			console.log("created");
 		},
 		methods:{
 			imgType:(extname) => {
@@ -58,12 +57,13 @@
 				}
 			},
 			getList:function(path,folderName){
+				console.log(path,folderName);
 				if(path){
 					Indicator.open();
-					console.log(path);
-					this.$router.push(location.pathname+'/'+folderName);
+					this.$router.push({path:location.pathname+'/'+folderName});	
 					var p = {
-						"pathRouter":path,
+						"folderRouter":path,
+						"folderName":folderName
 					}
 					try{
 						this.$http.post('/api/getfile/folderName',p).then(function(response){

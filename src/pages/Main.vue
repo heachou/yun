@@ -139,13 +139,6 @@ export default {
           fileBox:[]
         }
     },
-    beforeRouteUpdate (to, from, next) {
-	    const toDepth = to.path.split('/').length
-	    const fromDepth = from.path.split('/').length
-	    this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-	    console.log(to,from);
-	    next()
-	},
     created:function(){
     	//得到窗口高度
     	this.wh = document.body.clientHeight || document.documentElement.clientHeight;
@@ -199,6 +192,7 @@ export default {
 	    	})
     	},
     	addCount:function(){
+    		console.log((this.$store.count));
     		this.$store.commit('increment');
     	}
     },

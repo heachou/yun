@@ -5,7 +5,7 @@
   "author": "",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js",
+    "dev": "node build/dev-server.js webpack-dev-server --open --hot",
     "build": "node build/build.js"
   },
   "dependencies": {
@@ -24,12 +24,15 @@
     "babel-preset-env": "^1.2.1",
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.22.0",
+    "body-parser": "^1.17.1",
     "chalk": "^1.1.3",
     "connect-history-api-fallback": "^1.3.0",
+    "cookie-parser": "^1.4.3",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.1",
     "eventsource-polyfill": "^0.9.6",
     "express": "^4.14.1",
+    "express-session": "^1.15.2",
     "extract-text-webpack-plugin": "^2.0.0",
     "file-loader": "^0.10.0",
     "friendly-errors-webpack-plugin": "^1.1.3",
@@ -38,6 +41,7 @@
     "http-proxy-middleware": "^0.17.3",
     "less": "^2.7.2",
     "less-loader": "^4.0.2",
+    "mongodb": "^2.2.25",
     "opn": "^4.0.2",
     "optimize-css-assets-webpack-plugin": "^1.3.0",
     "ora": "^1.1.0",

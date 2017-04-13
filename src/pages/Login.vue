@@ -4,8 +4,8 @@
         <div class="avatarBox">
         	<img src="" alt="avatar" >
         </div>
-        <div class="formBox">
-        	<mt-field label="用户名" placeholder="请输入用户名" v-model="username"></mt-field>
+        <div class="formBox" @keyup.enter ="login">
+        	<mt-field label="用户名" placeholder="请输入用户名" v-focus v-model="username"></mt-field>
         	<mt-field label="密码" placeholder="请输入密码" type="password" v-model="password"></mt-field>
         </div>
         <div id="regBox">
@@ -38,10 +38,9 @@ export default {
     },
     created:function(){
     	//判断是否已经登陆过，如果登陆过，直接重定向到main页面
-    	var loginInfo = this.getLoginInfo();
-    	if(loginInfo.username != '' && loginInfo.password != '' && loginInfo.username && loginInfo.password){
-    		this.$router.push({path:'/main'});
-    	}
+    	if(this.$store.state.isLogin){
+            this.$router.push({path:'/main'});
+        }
     },
     methods:{
     	login:function(){
@@ -59,7 +58,8 @@ export default {
     				Toast('登录成功');
     				Indicator.close();
     				//将密码存储到localstorage
-    				this.saveLoginInfo(p);
+                    this.$store.commit('changeLogin');
+    				this.$store.commit('setUsername',p.username);
     				//跳转到首页
     				this.$router.push({path:'/main'})
     			}
@@ -71,19 +71,18 @@ export default {
     			Indicator.close();
     		});
     	},
-    	saveLoginInfo:function(loginParams){
-    		localStorage.setItem('username',loginParams.username);
-    		localStorage.setItem('password',loginParams.password);
-    	},
-    	getLoginInfo:function(){
-    		var loginInfo = {};
-    			loginInfo.username = localStorage.getItem('username');
-    			loginInfo.password = localStorage.getItem('password');
-    		return loginInfo;
-    	}
     },
     components:{
         'v-header':header
+    },
+    directives: {
+      focus: {
+        inserted: function (el) {
+            // 聚焦元素
+           var el = el.getElementsByTagName('input')[0];
+           el.focus();
+        }
+      }
     }
 }
 </script>

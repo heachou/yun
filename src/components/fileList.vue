@@ -1,15 +1,18 @@
 <template>
 	<div id="fileBox">
+		<transition name="slide">
+			<v-check-box :selectAll="selectAll" :cancelSelected="cancelSelected" :checkedNames="checkedNames"></v-check-box>
+		</transition>
 		<ul v-if="listBox.length != 0">
 			<li v-for="item in listBox">
 				<template v-if="item.type =='folder'">
-					<img :src="imgType(item.extName)" @click="getList(item.path,item.name)">
-					<div class="left" @click="getList(item.path,item.name)">
+					<img :src="imgType(item.extName)" @click="setFolderInfo(item.path,item.name)">
+					<div class="left" @click="setFolderInfo(item.path,item.name)">
 						<p class="ellipsis">{{item.name}}</p>	
 						<span>{{item.birth}}</span>
 					</div>
 					<label class="inputBox">
-						<input type="checkbox" >
+						<input type="checkbox" :value="item.name" v-model="checkedNames">
 					</label>
 				</template>
 				<template v-else>
@@ -19,7 +22,7 @@
 						<span>{{item.birth}}</span>
 					</div>
 					<label class="inputBox">
-						<input type="checkbox" >
+						<input type="checkbox" :value="item.name" v-model="checkedNames">
 					</label>
 				</template>
 			</li>
@@ -30,7 +33,7 @@
 <script type="text/javascript">
  	import imgTypeData from '../assets/js/imageType.js';
 	import { Indicator } from 'mint-ui';
-
+	import CheckBox from './checkBox.vue'
 	export default{
 		props:{
 			fileBox:{
@@ -39,11 +42,9 @@
 		},
 		data(){
 			return {
-				listBox: this.fileBox
+				listBox: this.fileBox,
+				checkedNames:[]
 			}
-		},
-		ready(){
-			console.log(location);
 		},
 		methods:{
 			imgType:(extname) => {
@@ -56,46 +57,40 @@
 					return location.origin+imgTypeData.folder;
 				}
 			},
-			getList:function(path,folderName){
+			setFolderInfo:function(path,folderName){
 				console.log(path,folderName);
 				if(path){
-					Indicator.open();
-					this.$router.push({path:location.pathname+'/'+folderName});	
 					var p = {
 						"folderRouter":path,
 						"folderName":folderName
 					}
-					try{
-						this.$http.post('/api/getfile/folderName',p).then(function(response){
-				    		var data = response.body;
-				    		var fileArray = data.list.fileArray;
-				    		var folderArray = data.list.folderArray;
-				    		this.listBox = [];
-				    		if(folderArray.length != 0){
-				    			for (var i = 0; i < folderArray.length; i++) {
-				    				this.listBox.push(folderArray[i])
-				    			}
-				    		}
-				    		if(fileArray.length != 0){
-				    			for (var i = 0; i < fileArray.length; i++) {
-				    				this.listBox.push(fileArray[i])
-				    			}
-				    		}
-				    		Indicator.close();
-				    	},function(){
-				    		// 关闭loading
-				    		Indicator.close();
-				    	})
-					}catch(e){
-						console.log(e);
-					}
-		    		
+					this.$store.commit('changeFolderInfo',p);
+		    		this.$router.push({path:location.pathname+'/'+folderName});	
+				}
+			},
+			cancelSelected:function(){
+				this.checkedNames = [];
+			},
+			selectAll:function(){
+				this.checkedNames = [];
+				for (var i = 0; i < this.listBox.length; i++) {
+					this.checkedNames.push(this.listBox[i].name);
 				}
 			}
+		},
+		components:{
+			'v-check-box':CheckBox
 		}
 	}
 </script>
 <style type="text/css" scoped>
+	.slide-enter-active, .slide-leave-active {
+	  transition: all .3s
+	}
+	.slide-enter, .slide-leave-active {
+		transform:translateY(-60px);
+	  	opacity: 0.2
+	}
 	#fileBox{
 		height: 100%;
 		overflow-y: scroll;

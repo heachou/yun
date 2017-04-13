@@ -4,7 +4,7 @@
     	<div class="avatarBox">
         	<img src="" alt="avatar" >
         </div>
-        <div class="formBox">
+        <div class="formBox" @keyup.enter="reg">
         	<mt-field label="用户名" placeholder="请输入用户名" v-model="username"></mt-field>
         	<mt-field label="密码" placeholder="请输入密码" type="password" v-model="password"></mt-field>
         	<mt-field label="密码" placeholder="请再输入密码" type="password" v-model="ensurePass"></mt-field>
@@ -35,7 +35,7 @@ export default {
     methods:{
     	reg:function(){
     		if(this.username == '' || this.password == '' || this.ensurePass == ''){
-    			Toast('请输入登录相关信息');
+    			Toast('请输入注册相关信息');
     			return;
     		}
     		if( this.password != this.ensurePass){

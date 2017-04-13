@@ -21,99 +21,8 @@
 		<v-file :fileBox ="fileBox"></v-file>
 		<!-- 切换区域 -->
 		<div class="tabContent" id="tabContent" v-show="selected != ''">
-			<div class="categoryBox" v-show="selected == 'category'">
-				<div class="categoryArea">
-					<ul>
-						<li>
-							<div>
-								<img src="../assets/images/dog.jpg">
-							</div>
-							<p>图片</p>
-						</li>
-						<li>
-							<div>
-								<img src="../assets/images/dog.jpg">
-							</div>
-							<p>文档</p>
-						</li>
-						<li>
-							<div>
-								<img src="../assets/images/dog.jpg">
-							</div>
-							<p>视屏</p>
-						</li>
-						<li>
-							<div>
-								<img src="../assets/images/dog.jpg">
-							</div>
-							<p>BT种子</p>
-						</li>
-						<li>
-							<div>
-								<img src="../assets/images/dog.jpg">
-							</div>
-							<p>音乐</p>
-						</li>
-						<li>
-							<div>
-								<img src="../assets/images/dog.jpg">
-							</div>
-							<p>应用</p>
-						</li>
-						<li>
-							<div>
-								<img src="../assets/images/dog.jpg">
-							</div>
-							<p>其他</p>
-						</li>
-					</ul>
-				</div>
-				<div class="mask" @click="closeModal"></div>
-			</div>
-			<div class="categoryBox" v-show="selected == 'upload'">
-				<div class="uploadArea">
-					<div class="uploadcontent">
-						<p class="text-center">选择上传文件类型</p>
-						<ul>
-							<li>
-								<div>
-									<img src="../assets/images/dog.jpg">
-								</div>
-								<p>图片</p>
-							</li>
-							<li>
-								<div>
-									<img src="../assets/images/dog.jpg">
-								</div>
-								<p>文档</p>
-							</li>
-							<li>
-								<div>
-									<img src="../assets/images/dog.jpg">
-								</div>
-								<p>视屏</p>
-							</li>
-							<li>
-								<div>
-									<img src="../assets/images/dog.jpg">
-								</div>
-								<p>音乐</p>
-							</li>
-							<li>
-								<div>
-									<img src="../assets/images/dog.jpg">
-								</div>
-								<p>全部</p>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="mask" @click="closeModal"></div>
-			</div>
-			<div class="categoryBox" v-show="selected == 'sendList'">
-				<div class="categoryArea">123</div>
-				<div class="mask" @click="closeModal"></div>
-			</div>
+			<v-tab-category :selected1="selected" :closeModal="closeModal"></v-tab-category>
+			<v-tab-upload :selected1="selected" :closeModal="closeModal"></v-tab-upload>
 		</div>
 		<!-- 底部 -->
 		<v-footer></v-footer>
@@ -127,7 +36,8 @@ import { Indicator } from 'mint-ui';
 import FileList from '../components/fileList.vue';
 import Footer from '../components/footer.vue';
 import Mheader from '../components/mainHeader.vue';
-Vue.component(Tabbar.name, Tabbar);
+import TabCategory from '../components/tabCategory.vue'
+import TabUpload from '../components/tabUpload.vue'
 Vue.component(TabItem.name, TabItem);
 Vue.component(Popup.name, Popup);
 export default {
@@ -139,30 +49,18 @@ export default {
           popupVisible: false,
           wh:0,
           fileBox:[],
-          title:'1233444',
+          title:this.$store.state.folderInfo.folderName,
         }
     },
     created:function(){
-    	//得到窗口高度
-    	this.wh = document.body.clientHeight || document.documentElement.clientHeight;
-    	//获取文件列表
     	// 初次进入获取整个文件夹列表
     	this.getFileList();
-    },
-    mounted:function(){
-    	document.getElementById('tabContent').style.height = (this.wh-90)+'px';
     },
     watch:{
     	selected(curVal,oldVal){
     		if(curVal=='sendList'){
     			this.$router.push({path:'/transmission/list'});
     			return;
-    		}
-    		//弹出层时，禁止滚动
-    		if(curVal != ''){
-    			document.getElementsByTagName('body')[0].style.overflow = 'hidden';
-    		}else{
-    			document.getElementsByTagName('body')[0].style.overflow = 'auto';
     		}
     	}
     },
@@ -172,56 +70,71 @@ export default {
     	},
     	getFileList:function(){
     		Indicator.open();
-    		this.$http.post('/api/getfile/uploads').then(function(response){
-	    		var data = response.body;
-	    		var fileArray = data.list.fileArray;
-	    		var folderArray = data.list.folderArray;
-	    		if(folderArray.length != 0){
-	    			for (var i = 0; i < folderArray.length; i++) {
-	    				this.fileBox.push(folderArray[i])
-	    			}
-	    		}
-	    		if(fileArray.length != 0){
-	    			for (var i = 0; i < fileArray.length; i++) {
-	    				this.fileBox.push(fileArray[i])
-	    			}
-	    		}
-	    		// 关闭loading
-	    		Indicator.close();
-	    	},function(){
-	    		// 关闭loading
-	    		Indicator.close();
-	    	})
+    		this.fileBox = [];
+    		if(location.pathname != '/main'){
+    			/*alert(this.$store.state.folderInfo.folderRouter);*/
+    			var p = this.$store.state.folderInfo;
+    			try{
+					this.$http.post('/api/getfile/folderName',p).then(function(response){
+			    		var data = response.body;
+			    		var fileArray = data.list.fileArray;
+			    		var folderArray = data.list.folderArray;
+			    		
+			    		if(folderArray.length != 0){
+			    			for (var i = 0; i < folderArray.length; i++) {
+			    				this.fileBox.push(folderArray[i])
+			    			}
+			    		}
+			    		if(fileArray.length != 0){
+			    			for (var i = 0; i < fileArray.length; i++) {
+			    				this.fileBox.push(fileArray[i])
+			    			}
+			    		}
+			    		Indicator.close();
+			    	},function(){
+			    		// 关闭loading
+			    		Indicator.close();
+			    	})
+				}catch(e){
+					console.log(e);
+				}
+				return;
+    		}else{
+	    		this.$http.post('/api/getfile/uploads').then(function(response){
+		    		var data = response.body;
+		    		var fileArray = data.list.fileArray;
+		    		var folderArray = data.list.folderArray;
+		    		if(folderArray.length != 0){
+		    			for (var i = 0; i < folderArray.length; i++) {
+		    				this.fileBox.push(folderArray[i])
+		    			}
+		    		}
+		    		if(fileArray.length != 0){
+		    			for (var i = 0; i < fileArray.length; i++) {
+		    				this.fileBox.push(fileArray[i])
+		    			}
+		    		}
+		    		// 关闭loading
+		    		Indicator.close();
+		    	},function(){
+		    		// 关闭loading
+		    		Indicator.close();
+		    	})
+		    }
     	}
     },
     components:{
     	"v-file":FileList,
     	"v-footer":Footer,
-    	"v-mheader":Mheader
+    	"v-mheader":Mheader,
+    	'v-tab-category':TabCategory,
+    	'v-tab-upload':TabUpload
     }
 }
 </script>
 
 <style scoped lang="less">
-	@keyframes myMove{
-		0%{
-			transform:translateY(-200px);
-		}
-		100%{
-			transform:translateY(0px);
-		}
-	}
-	@keyframes imgscale{
-		0%{
-			transform:scale(0.3);
-		}
-		80%{
-			transform:scale(1.1);
-		}
-		100%{
-			transform:scale(1);
-		}
-	}
+	
 	.main{
 		height: 100%;
 		padding-top: 90px;
@@ -244,85 +157,9 @@ export default {
 		left: 0;
 		top:90px;
 		width: 100%;
-	}
-	.categoryBox{
-		width: 100%;
 		height: 100%;
-		.categoryArea{
-			width: 100%;
-			height: 100%;
-			>ul{
-				position: relative;
-				z-index: 2;
-				clear: both;
-				overflow: hidden;
-				padding: 10px 15px;
-				background: #2f3b49;
-				color: #fff;
-				animation: myMove 0.3s ease-out;
-				li{
-					float: left;
-					width: 25%;
-					margin-bottom: 8px;
-					text-align: center;
-					img{
-						width: 50px;
-						height: 50px;
-						border-radius: 50%;
-
-					}
-					p{
-						line-height: 2;
-						font-size: 12px;
-					}
-				}
-			}
-		}
-		.uploadArea{
-			width: 100%;
-			height: 100%;
-			position: relative;
-			>.uploadcontent{
-				position: absolute;
-				left: 50%;
-				top:50%;
-				width: 80%;
-				background: #2f3b49;
-				clear:both;
-				color: #fff;
-				padding: 10px 15px;
-				overflow: hidden;
-				z-index: 2;
-				transform:translate(-50%,-50%);
-				p{
-					line-height: 2;
-					font-size: 12px;
-					margin-bottom: 15px;
-				}
-				li{
-					width: 33%;
-					float: left;
-					text-align: center;
-					img{
-						width: 50px;
-						height: 50px;
-						animation: imgscale 0.4s ease-out;
-						border-radius: 50%;
-					}
-				}
-			}
-		}
-		.mask{
-			position: absolute;
-			left:0;
-			top:0;
-			height: 100%;
-			width: 100%;
-			z-index: 1;
-			opacity: 0.4;
-			background: rgb(0,0,0);
-		}
 	}
+	
 	.tabBox{
 		position: relative;
 		z-index: 33;

@@ -5,15 +5,36 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    count: 0,
-    isLogin:false
+    isLogin:false,
+    username:'',
+    folderInfo:{
+      folderRouter:'',
+      folderName:''
+    }
   },
   mutations: {
-    increment: state => state.count++,
-    decrement: state => state.count--,
     // 改变登录状态
     changeLogin: state => {
     	state.isLogin = !state.isLogin;
+    },
+    // 设置登录名
+    setUsername:(state,username) => {
+      state.username = username;
+    },
+    changeFolderInfo:(state,obj) => {
+      state.folderInfo.folderRouter = obj.folderRouter;
+      state.folderInfo.folderName = obj.folderName;
     }
+  },
+  getters: {
+      isLogin:state => {
+          return state.isLogin;
+      },
+      username:state => {
+          return state.username;
+      },
+      folderInfo:state => {
+          return state.folderInfo;
+      }
   }
 })

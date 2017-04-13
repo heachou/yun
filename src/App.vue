@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-  	<transition :name="transitionName">
     	<router-view class="child-view"></router-view>
-  	</transition>
   </div>
 </template>
 
@@ -28,6 +26,7 @@ export default {
 <style>
 #app{
 	height: 100%;
+  overflow: hidden;
 }
 .child-view {
   width:100%;

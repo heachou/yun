@@ -1,6 +1,6 @@
 <template>
     <div class="transmissionBox">
-    	<v-header  title="传输列表" returnUrl="/main" :leftNeed="true" :rightNeed="false"></v-header>
+    	<v-header  title="传输列表" returnUrl="/main" :leftNeed="true" :rightNeed="true"></v-header>
     </div>
 </template>
 <script>

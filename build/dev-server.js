@@ -11,7 +11,6 @@ var express = require('express')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
-
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
 // automatically open browser, if not set will be false
@@ -60,15 +59,45 @@ app.use(hotMiddleware)
 
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-app.use(staticPath, express.static('./static'))
 
-var uri = 'http://localhost:' + port
+app.use(staticPath, express.static('./static'))
+app.use(express.static('../uploads'));
+
+const fs = require('fs');
+var path = require('path');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient;
+
+var router = require('../router/router.js');
+var db = require('../model/db.js');
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+app.use(cookieParser())
+app.use(session({
+  secret: 'the 2 of us', 
+  resave:false,
+  saveUninitialized: true,
+})); 
+
+// 路由
+//登录
+app.post('/api/login',router.showLogin);
+//注册
+app.post('/api/reg',router.showReg);
+//首次进入读取主页文件列表
+app.post('/api/getfile/uploads',router.getFileList);
+//点击文件夹读取文件夹下文件
+app.post('/api/getfile/folderName',router.getFileByClickFolder);
 
 var _resolve
 var readyPromise = new Promise(resolve => {
   _resolve = resolve
 })
 
+var uri = 'http://localhost:' + port
 console.log('> Starting dev server...')
 devMiddleware.waitUntilValid(() => {
   console.log('> Listening at ' + uri + '\n')

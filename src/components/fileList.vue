@@ -3,6 +3,9 @@
 		<transition name="slide">
 			<v-check-box :selectAll="selectAll" :cancelSelected="cancelSelected" :checkedNames="checkedNames"></v-check-box>
 		</transition>
+		<transition name="slidedown">
+			<v-tool-bar :checkedNames="checkedNames"></v-tool-bar>
+		</transition>
 		<ul v-if="listBox.length != 0">
 			<li v-for="item in listBox">
 				<template v-if="item.type =='folder'">
@@ -34,6 +37,7 @@
  	import imgTypeData from '../assets/js/imageType.js';
 	import { Indicator } from 'mint-ui';
 	import CheckBox from './checkBox.vue'
+	import ToolBar from './toolBar.vue'
 	export default{
 		props:{
 			fileBox:{
@@ -79,17 +83,26 @@
 			}
 		},
 		components:{
-			'v-check-box':CheckBox
+			'v-check-box':CheckBox,
+			'v-tool-bar':ToolBar
 		}
 	}
 </script>
 <style type="text/css" scoped>
 	.slide-enter-active, .slide-leave-active {
-	  transition: all .3s
+	  	transition: all .3s
 	}
 	.slide-enter, .slide-leave-active {
 		transform:translateY(-60px);
 	  	opacity: 0.2
+	}
+	
+	.slidedown-enter-active, .slidedown-leave-active {
+	  	transition: all .3s
+	}
+	.slidedown-enter, .slidedown-leave-active {
+		transform:translateY(46px);
+	  	opacity: 0.1
 	}
 	#fileBox{
 		height: 100%;

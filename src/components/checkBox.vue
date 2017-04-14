@@ -9,7 +9,12 @@
 </template>
 <script type="text/javascript">
 	export default{
-		props:['checkedNames','cancelSelected','selectAll']
+		props:['checkedNames','cancelSelected','selectAll'],
+		data (){
+			return{
+
+			}
+		}
 	}
 </script>
 <style type="text/css" lang="less">

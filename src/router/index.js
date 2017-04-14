@@ -5,6 +5,7 @@ import Mint from 'mint-ui';
 import 'mint-ui/lib/style.css';
 import animate from 'animate.css';
 import "../assets/css/common.css";
+import "../assets/css/font-awesome.min.css";
 import "../assets/font/iconfont.css";
 
 // 导入组件

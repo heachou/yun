@@ -27,6 +27,8 @@ exports.showLogin = function(req, res) {
             var md5 = crypto.createHash('md5');
             var passwordByMd5 = md5.update(password).digest('hex');
     		if(result[0].password == passwordByMd5){//密码一致
+                req.session.login = 1;
+                req.session.username = username;
     			if(req.cookies.isVisit){//判断是第几次登录 
     				console.log("二次登录");	
     			}else{
@@ -144,8 +146,8 @@ exports.getFileList = (req, res) => {
 
 exports.getFileByClickFolder = (req, res) => {
     
-    var path1 = req.body.folderRouter;
-    var folderName = req.body.folderName;
+    var path1 = path.normalize(req.body.folderRouter);
+    var folderName = path1.split('uploads\\')[1];
     console.log(path1);
     fs.readdir(path1, function(err, files) {
         if (err) {
@@ -183,19 +185,17 @@ exports.getFileByClickFolder = (req, res) => {
                     fileArray.push({
                         type: 'file',
                         name: files[x],
-                        path: path.normalize(__dirname + "/../uploads/" + folderName + "/" + files[x]),
+                        path: path.normalize(__filename + "/../../uploads" + folderName + "/" + files[x]),
                         extName: path.extname(path1 + '/' + files[x]),
-                        birth: birthTime,
-                        checked:false  //所有的input都不选中
+                        birth: birthTime
                     })
                 } else {
                     folderArray.push({
                         type: 'folder',
                         name: files[x],
-                        path: path.normalize(__dirname + "/../uploads/" + folderName + "/" + files[x]),
+                        path: path.normalize(__filename + "/../../uploads/" + folderName + "/" + files[x]),
                         extName: '',
-                        birth: birthTime,
-                        checked:false  //所有的input都不选中
+                        birth: birthTime
                     })
                 }
                 iterator(x + 1);

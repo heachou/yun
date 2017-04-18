@@ -74,6 +74,12 @@ const router = new Router({
   ]
 })
 router.beforeEach((to, from, next) => {
+  if(to.path != "/reg" || to.path != "/login"){
+    if(!localStorage.getItem('user')){
+      next()
+      router.push({ path: '/login' })
+    }
+  }
   next();
 })
 export default router;

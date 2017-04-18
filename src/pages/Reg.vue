@@ -52,6 +52,9 @@ export default {
     				Toast('注册成功,去登录吧..');
     				Indicator.close();
     				//跳转到首页
+                    // 清除登录信息
+                    this.$store.commit('changeLogin');
+                    
     				this.$router.push({path:'/login'})
     			}
     			if(response.body.success == 0){

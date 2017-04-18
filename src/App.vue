@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    	<router-view class="child-view"></router-view>
+      <transition :name="transitionName" mode="out-in">
+    	   <router-view keep-alive class="child-view"></router-view>
+      </transition>
   </div>
 </template>
 
@@ -26,12 +28,12 @@ export default {
 <style>
 #app{
 	height: 100%;
+  position: relative;
   overflow: hidden;
 }
 .child-view {
-  width:100%;
-  position: absolute;
-  transition: all .5s  cubic-bezier(.55,0,.1,1);
+  width: 100%;
+  transition: all .3s cubic-bezier(.55,0,.1,1);
 }
 .slide-left-enter, .slide-right-leave-active {
   opacity: 0;
@@ -39,7 +41,7 @@ export default {
   transform: translate(100%, 0);
 }
 .slide-left-leave-active, .slide-right-enter {
-  opacity:0;
+  opacity: 0;
   -webkit-transform: translate(-100%, 0);
   transform: translate(-100%, 0);
 }

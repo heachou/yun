@@ -5,7 +5,7 @@
 			<!-- <li><i class="fa fa-folder-open-o" aria-hidden="true"></i><p>打开</p></li> -->
 			<li><i class="fa fa-cloud-download" aria-hidden="true"></i><p>下载</p></li>
 			<li><i class="fa fa-paper-plane-o" aria-hidden="true"></i><p>分享</p></li>
-			<li><i class="fa fa-times" aria-hidden="true"></i><p>删除</p></li>
+			<li><i class="fa fa-times" aria-hidden="true" @click="deleteFile"></i><p>删除</p></li>
 			<li class="pore" @click="">
 				<i class="fa fa-ellipsis-h" aria-hidden="true"></i>
 				<p>更多</p>
@@ -14,16 +14,25 @@
 	</div>
 </template>
 <script type="text/javascript">
+import { Toast } from 'mint-ui';
 export default {
   name: 'toolBar',
   props:['checkedNames'],
   data () {
-    return {
-    	isA:true
+    return { 
     };
   },
   methods: {
-  
+  	deleteFile:function(){
+  		var p = this.checkedNames;
+  		this.$http.post('/deleteFile',{"fileArray":p}).then(function(response){
+  			var result = response.body;
+  			if(result.success == 1){
+  				// 	
+  				Toast('删除成功');
+  			}
+  		})
+  	}
   },
 };
 </script>

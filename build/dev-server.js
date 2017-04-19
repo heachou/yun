@@ -91,6 +91,8 @@ app.post('/api/reg',router.showReg);
 app.post('/api/getfile/uploads',router.getFileList);
 //点击文件夹读取文件夹下文件
 app.post('/api/getfile/folderName',router.getFileByClickFolder);
+// 删除文件
+app.post('/deleteFile',router.dodeleteFile);
 
 var _resolve
 var readyPromise = new Promise(resolve => {

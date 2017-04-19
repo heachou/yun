@@ -145,7 +145,6 @@ exports.getFileList = (req, res) => {
 }
 
 exports.getFileByClickFolder = (req, res) => {
-    
     var path1 = path.normalize(req.body.folderRouter);
     var folderName = path1.split('uploads\\')[1];
     console.log(path1);
@@ -202,4 +201,9 @@ exports.getFileByClickFolder = (req, res) => {
             });
         })(0)
     })
+}
+exports.dodeleteFile = (req,res) => {
+    var fileArray = req.body.fileArray;
+    console.log(fileArray);
+    res.json({success:1});
 }

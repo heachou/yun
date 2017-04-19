@@ -34,7 +34,7 @@
 						<span>{{item.birth}}</span>
 					</div>
 					<label class="inputBox">
-						<input type="checkbox" :value="item.name" v-model="checkedNames">
+						<input type="checkbox" :value="item.path" v-model="checkedNames">
 					</label>
 				</template>
 				<template v-else>
@@ -44,7 +44,7 @@
 						<span>{{item.birth}}</span>
 					</div>
 					<label class="inputBox">
-						<input type="checkbox" :value="item.name" v-model="checkedNames">
+						<input type="checkbox" :value="item.path" v-model="checkedNames">
 					</label>
 				</template>
 			</li>
@@ -190,7 +190,7 @@ export default {
 		selectAll:function(){
 			this.checkedNames = [];
 			for (var i = 0; i < this.fileBox.length; i++) {
-				this.checkedNames.push(this.fileBox[i].name);
+				this.checkedNames.push(this.fileBox[i].path);
 			}
 		}
     },

@@ -1,26 +1,22 @@
 <template>
 	<div>
-		<input type="checkbox" value="Jack" v-model="checkedNames"><br>
-		<input type="checkbox" value="John" v-model="checkedNames"><br>
-		<input type="checkbox" value="Mike" v-model="checkedNames"><br>
-		<br>
-<span>Checked names: {{ checkedNames | json }}</span>
+		asdas
 	</div>
 </template>
 <script type="text/javascript">
-	export default{
-		name:'share',
-		data(){
-			return{
-				checkedNames:[]
-			}
-		},
-		created(){
-		},
-		methods:{
-			
-		},
+export default {
+  name: 'share',
+  props:[],
+  data () {
+    return {
 
-	}
+    };
+  },
+  methods: {
+  
+  },
+};
 </script>
-<style type="text/css"></style>
+<style type="text/css" lang="less" scoped>
+
+</style>

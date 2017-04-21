@@ -12,39 +12,9 @@
     	<p>传输列表</p>
     	<p>传输列表</p>
     	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
-    	<p>传输列表</p>
+        <form id="download" action="/testDownload" method="get">
+            <input id="submit" type="submit" value="Submit" />
+        </form>
     </div>
 </template>
 <script>
@@ -54,6 +24,14 @@ export default{
 	name:'transmission',
 	components:{
         'v-header':header
+    },
+    ready(){
+        this.testDownload();
+    },
+    methods:{
+        testDownload:function(){
+            alert(2);
+        }
     }
 }
 </script>

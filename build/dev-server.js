@@ -93,6 +93,10 @@ app.post('/api/getfile/uploads',router.getFileList);
 app.post('/api/getfile/folderName',router.getFileByClickFolder);
 // 删除文件
 app.post('/deleteFile',router.dodeleteFile);
+// 下载文件
+app.post('/downloadFile',router.downloadFile);
+// 测试文件下载
+app.get('/testDownload',router.testDownload);
 
 var _resolve
 var readyPromise = new Promise(resolve => {

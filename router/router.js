@@ -4,6 +4,8 @@ var path = require('path');
 const crypto = require('crypto');
 // 
 var db = require('../model/db.js');
+var deleteFile = require('../myUntil/deleteFolder.js');
+var getAllFile = require('../myUntil/getFileAndFolder.js');
 
 exports.showLogin = function(req, res) {
     var username = req.body.username;
@@ -184,7 +186,7 @@ exports.getFileByClickFolder = (req, res) => {
                     fileArray.push({
                         type: 'file',
                         name: files[x],
-                        path: path.normalize(__filename + "/../../uploads" + folderName + "/" + files[x]),
+                        path: path.normalize(__filename + "/../../uploads/" + folderName + "/" + files[x]),
                         extName: path.extname(path1 + '/' + files[x]),
                         birth: birthTime
                     })
@@ -204,6 +206,38 @@ exports.getFileByClickFolder = (req, res) => {
 }
 exports.dodeleteFile = (req,res) => {
     var fileArray = req.body.fileArray;
-    console.log(fileArray);
-    res.json({success:1});
+    (function delelteAllFile(i){
+        if(i == fileArray.length){
+            res.json({success:1});
+            return;
+        }
+        deleteFile.rmdirSync(fileArray[i],function(err,cb){
+            if(err){
+                return console.log(err);
+            }
+            delelteAllFile(i+1);
+        });
+
+    })(0)
+}
+
+exports.downloadFile = (req,res) => {
+    var downloadFile = req.body.downloadFile;
+    getAllFile(downloadFile[0],function(err,result){
+        if(err){
+            return console.log(err);
+        }
+        res.download(result.files[0], function(err){
+          if (err) {
+            return console.log(err);
+          } else {
+            console.log("下载成功");
+            // decrement a download credit, etc.
+          }
+        });
+    });
+}
+
+exports.testDownload = (req,res) => {
+    res.download('E:\\ZHOUHAI\\yun\\uploads\\1 - 副本.png');
 }

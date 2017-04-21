@@ -23,7 +23,7 @@
 			<v-check-box :selectAll="selectAll" :cancelSelected="cancelSelected" :checkedNames="checkedNames"></v-check-box>
 		</transition>
 		<transition name="slidedown">
-			<v-tool-bar :checkedNames="checkedNames"></v-tool-bar>
+			<v-tool-bar :checkedNames="checkedNames" @cancelSelected="cancelSelected" @removeByValue="removeByValue"></v-tool-bar>
 		</transition>
 		<ul v-if="fileBox.length != 0">
 			<li v-for="item in fileBox">
@@ -192,6 +192,16 @@ export default {
 			for (var i = 0; i < this.fileBox.length; i++) {
 				this.checkedNames.push(this.fileBox[i].path);
 			}
+		},
+		removeByValue:function(val) {
+		  var list = this.fileBox;
+		  for(var i=0; i<list.length; i++) {
+		    if(list[i].path == val) {
+		      list.splice(i, 1);
+		      this.fileBox = list;
+		      break;
+		    }
+		  }
 		}
     },
     components:{

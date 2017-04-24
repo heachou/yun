@@ -39,7 +39,7 @@ export default {
     created:function(){
     	//判断是否已经登陆过，如果登陆过，直接重定向到main页面
     	if(this.$store.state.isLogin){
-            this.$router.push({path:'/main'});
+            //this.$router.push({path:'/main'});
         }
     },
     methods:{
@@ -58,7 +58,7 @@ export default {
     				Toast('登录成功');
     				Indicator.close();
     				//将密码存储到localstorage
-                    this.$store.commit('changeLogin');
+                    this.$store.commit('login');
     				this.$store.commit('setUsername',p.username);
     				//跳转到首页
     				this.$router.push({path:'/main'})

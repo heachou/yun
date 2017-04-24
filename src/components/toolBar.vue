@@ -42,15 +42,21 @@ export default {
   	},
   	// 下载
   	downloadFile:function(){
+  		var _this = this;
   		var p = this.checkedNames;
   		Indicator.open('准备下载中...');
-  		this.$http.post('/downloadFile',{"downloadFile":p}).then(function(response){
+  		setTimeout(function(){
+  			Indicator.close();
+  			_this.$router.push({name:'Transmission',query: { downloadArray: p }});
+  			Toast('下载成功');
+  		}, 2500);
+  		/*this.$http.post('/downloadFile',{"downloadFile":p}).then(function(response){
   			var result = response.body;
   			if(result.success == 1){
   				Indicator.close();
   				Toast('下载成功');
   			}
-  		})
+  		})*/
   	}
   },
 };

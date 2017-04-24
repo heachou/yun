@@ -14,21 +14,16 @@ export default new Vuex.Store({
   },
   mutations: {
     // 改变登录状态
-    changeLogin: state => {
-    	state.isLogin = !state.isLogin;
-      if(state.isLogin){
-        // 成功登录
-        localStorage.setItem('user',1)
-      }else{
-        // 未登录
-        localStorage.setItem('user',0)
-      }
+    login:state => {
+      localStorage.setItem('user',true)
+    },
+    logout:state => {
+      localStorage.setItem('user',false)
     },
     // 设置登录名
     setUsername:(state,username) => {
       state.username = username;
       localStorage.setItem('username',username);
-
     },
     changeFolderInfo:(state,obj) => {
       state.folderInfo.folderRouter = obj.folderRouter;

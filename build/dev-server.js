@@ -88,15 +88,19 @@ app.post('/api/login',router.showLogin);
 //注册
 app.post('/api/reg',router.showReg);
 //首次进入读取主页文件列表
-app.post('/api/getfile/uploads',router.getFileList);
+app.post('/api/getfile/uploads',router.needLogin,router.getFileList);
 //点击文件夹读取文件夹下文件
-app.post('/api/getfile/folderName',router.getFileByClickFolder);
+app.post('/api/getfile/folderName',router.needLogin,router.getFileByClickFolder);
 // 删除文件
-app.post('/deleteFile',router.dodeleteFile);
+app.post('/deleteFile',router.needLogin,router.dodeleteFile);
 // 下载文件
-app.post('/downloadFile',router.downloadFile);
-// 测试文件下载
-app.get('/testDownload',router.testDownload);
+app.post('/downloadFile',router.needLogin,router.downloadFile);
+// 获取已下载的文件列表
+app.get('/getDownloadHistory',router.needLogin,router.getDownloadHistory);
+// 添加下载文件
+app.post('/addDownloadHistory',router.needLogin,router.addDownloadHistory);
+
+
 
 var _resolve
 var readyPromise = new Promise(resolve => {

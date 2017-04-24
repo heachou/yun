@@ -87,6 +87,20 @@ exports.showReg = (req, res) => {
         }
     })
 }
+// 需要登录
+exports.needLogin = (req,res,next) => {
+    var name = req.session.username;
+    // 说明登录未过期
+    if(name){
+        next();
+    }else{
+        res.json({
+            success:0,
+            msg:"登录过期"
+        })
+    }
+}
+
 exports.getFileList = (req, res) => {
     var path1 = './uploads';
     fs.readdir(path1, function(err, files) {
@@ -237,7 +251,54 @@ exports.downloadFile = (req,res) => {
         });
     });
 }
-
-exports.testDownload = (req,res) => {
-    res.download('E:\\ZHOUHAI\\yun\\uploads\\1 - 副本.png');
+// 得到下载历史记录
+exports.getDownloadHistory = (req,res) => {
+    // 得到用户名
+    var name = req.session.username;
+    // 用户名存在
+    if(name){
+        db.find("downloadHistory",{username:name},function(err,result){
+            if(err){
+                return console.log(err);
+            }
+            return res.json({
+                success:1,
+                downloadHistoryFiles:result[0].files
+            });
+        })
+    }
+}
+// 添加下载历史记录
+exports.addDownloadHistory = (req,res) => {
+    // 得到用户名
+    var name = req.session.username;
+    var files = req.body.files;
+    // 用户名存在
+    if(name){
+        db.find("downloadHistory",{username:name},function(err,result){
+            if(err){
+                return console.log(err);
+            }
+            // 说明是用户第一次下载
+            if(result.length == 0){ 
+                db.insertOne('downloadHistory',{username:name,files:files},function(err,result){
+                    if(err){
+                        return console.log(err);
+                    }
+                    res.json({success:1,msg:"数据插入成功"});
+                })
+            }else{
+                var oldFiles = result[0].files;
+                files.forEach(function(item,index){
+                    oldFiles.push(item);
+                })
+                // 数组去重
+                var newFiles = Array.from(new Set(oldFiles));
+                
+                db.updateMany('downloadHistory',{username:name},{$set:{files:newFiles}},function(err,result){
+                    res.json({success:1,msg:"数据插入成功"});
+                });
+            }
+        })
+    }
 }

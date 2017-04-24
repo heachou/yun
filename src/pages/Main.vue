@@ -77,6 +77,12 @@ export default {
     		Indicator.open();
     		this.$http.post('/api/getfile/uploads').then(function(response){
 	    		var data = response.body;
+	    		if(data.success == 0){
+	    			Indicator.close();
+	    			Toast(data.msg);
+	    			this.$router.push({"path":"/login"})
+	    			return;
+	    		}
 	    		var fileArray = data.list.fileArray;
 	    		var folderArray = data.list.folderArray;
 	    		if(folderArray.length != 0){

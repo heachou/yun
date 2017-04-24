@@ -62,7 +62,7 @@ const router = new Router({
       component: More
     },
     {//传输列表
-      path: '/transmission/list',
+      path: '/transmission/list/',
       name: 'Transmission',
       component: Transmission
     },
@@ -74,12 +74,17 @@ const router = new Router({
   ]
 })
 router.beforeEach((to, from, next) => {
-  if(to.path != "/reg" || to.path != "/login"){
-    if(!localStorage.getItem('user')){
+  // 
+  if(to.path != "/reg" && to.path != "/login"){
+    // 用户未登录,重定向到登录页面
+    if(localStorage.getItem('user') == "false" || localStorage.getItem('user') == null){
       next()
       router.push({ path: '/login' })
+    }else{
+      next();
     }
+  }else{
+    next();
   }
-  next();
 })
 export default router;

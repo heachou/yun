@@ -1,6 +1,6 @@
 <template>
 	<div class="header">
-			<mt-header :title="title">
+			<mt-header :fixed="fixed" :title="title">
 			<template v-if="leftNeed">
 				<router-link :to="returnUrl"  slot="left">
 			    <mt-button icon="back"></mt-button>
@@ -18,6 +18,10 @@
 		props:{
 			title:{
 		      	type: String
+		    },
+		    fixed:{
+		    	type:Boolean,
+		    	default:false
 		    },
 			returnUrl:{
 		      	type: String,

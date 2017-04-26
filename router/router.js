@@ -222,7 +222,10 @@ exports.dodeleteFile = (req,res) => {
     var fileArray = req.body.fileArray;
     (function delelteAllFile(i){
         if(i == fileArray.length){
-            res.json({success:1});
+            res.json({
+                success:1,
+                msg:"ok"
+            });
             return;
         }
         deleteFile.rmdirSync(fileArray[i],function(err,cb){
@@ -294,11 +297,25 @@ exports.addDownloadHistory = (req,res) => {
                 })
                 // 数组去重
                 var newFiles = Array.from(new Set(oldFiles));
-                
                 db.updateMany('downloadHistory',{username:name},{$set:{files:newFiles}},function(err,result){
                     res.json({success:1,msg:"数据插入成功"});
                 });
             }
         })
     }
+}
+// 删除下载历史记录
+exports.deleteFileByPath = (req,res) => {
+    var filePath = req.body.filePath;
+    var name = req.session.username;
+    // 执行删除
+    db.updateMany("downloadHistory",{username:name},{$pull:{files:filePath}},function(err,result){
+        if(err){
+            return console.log(err);
+        }
+        return res.json({
+            success:1,
+            msg:"删除文件成功"
+        })
+    })
 }

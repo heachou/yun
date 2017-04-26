@@ -99,8 +99,9 @@ app.post('/downloadFile',router.needLogin,router.downloadFile);
 app.get('/getDownloadHistory',router.needLogin,router.getDownloadHistory);
 // 添加下载文件
 app.post('/addDownloadHistory',router.needLogin,router.addDownloadHistory);
-
-
+// 删除传输列表里面文件
+app.post('/deleteFileByPath',router.needLogin,router.deleteFileByPath)
+// 传输列表用户刷新
 
 var _resolve
 var readyPromise = new Promise(resolve => {

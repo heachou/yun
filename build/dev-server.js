@@ -101,8 +101,8 @@ app.get('/getDownloadHistory',router.needLogin,router.getDownloadHistory);
 app.post('/addDownloadHistory',router.needLogin,router.addDownloadHistory);
 // 删除传输列表里面文件
 app.post('/deleteFileByPath',router.needLogin,router.deleteFileByPath)
-// 传输列表用户刷新
-
+// 用户登出
+app.post('/logout',router.needLogin,router.logout);
 var _resolve
 var readyPromise = new Promise(resolve => {
   _resolve = resolve

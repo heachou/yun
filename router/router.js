@@ -100,7 +100,9 @@ exports.needLogin = (req,res,next) => {
         })
     }
 }
-
+exports.logout = (req,res) => {
+    
+}
 exports.getFileList = (req, res) => {
     var path1 = './uploads';
     fs.readdir(path1, function(err, files) {
